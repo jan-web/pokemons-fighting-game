@@ -1,38 +1,59 @@
-//Задача1
-const firstRow = 'мама мыла раму';
-const secondRow = 'собака друг человека';
-function getRow(firstRow, secondRow) {
-	let firstRowA = countA(firstRow) ,
-		secondRowA = countA(secondRow);
-	if (firstRowA > secondRowA) {
-		return firstRow
-	} else if (firstRowA < secondRowA) {
-		return secondRow;
+const $btn = document.getElementById('btn-kick');
+const character = {
+	name: 'Picachu',
+	defaultHP: 100,
+	damageHP: 100,
+	elHP: document.getElementById('health-character'),
+	elProgressbar: document.getElementById('progressbar-character'),
+}
+
+const enemy = {
+	name: 'Charmander',
+	defaultHP: 100,
+	damageHP: 100,
+	elHP: document.getElementById('health-enemy'),
+	elProgressbar: document.getElementById('progressbar-enemy'),
+}
+
+$btn.addEventListener('click', function () {
+	console.log('Kick!');
+	changeHP(random(20), character);
+	changeHP(random(20), enemy);
+
+});
+
+function init () {
+	console.log('Start Game');
+	renderHP(character);
+	renderHP(enemy);
+}
+
+function renderHP(person) {
+	renderHPLife(person);
+	renderProgressbarHP(person);
+}
+
+function renderHPLife(person) {
+	person.elHP.innerText = person.damageHP + ' / ' + person.defaultHP;
+}
+
+function renderProgressbarHP(person) {
+	person.elProgressbar.style.width = person.damageHP + '%';
+}
+
+function changeHP(count, person) {
+	if(person.damageHP < count) {
+		person.damageHP = 0
+		alert('Бедный '+person.name+' проиграл бой');
+		$btn.disabled = true;
 	} else {
-		return firstRow + ' содержит столько же букв а как и в ' + secondRow;
+		person.damageHP -= count;
 	}
+	renderHP(person);
 }
 
-function countA(str){
-	let counter = 0;
-	for (i = 0; i < str.length; i++){
-		(str[i].charAt() === 'а') ? counter++ : true;
-	}
-	return counter;
+function random(num) {
+	return Math.ceil(Math.random() * num);
 }
 
-console.log(getRow(firstRow, secondRow)); // мама мыла раму
-
-//Задача 2
-function formattedPhone(phone) {
-	return dig(phone, 0, 2) + ' ' + '(' + dig(phone, 2, 3) + ')' + ' ' + dig(phone, 5, 3) + '-' + dig(phone, 8, 2) + '-' + dig(phone, 10, 2);
-}
-
-function dig (str, number, quantity) {
-	let result = '';
-	for (i = number; i < (number+quantity); i++){
-		result +=str[i];
-	}
-	return result;
-}
-console.log(formattedPhone('+71234567890')); // +7 (123) 456-78-90
+init();
