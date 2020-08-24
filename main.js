@@ -5,6 +5,9 @@ const character = {
 	damageHP: 100,
 	elHP: document.getElementById('health-character'),
 	elProgressbar: document.getElementById('progressbar-character'),
+	renderHPLife: renderHPLife,
+	renderProgressbarHP: renderProgressbarHP,
+	changeHP: changeHP,
 }
 
 const enemy = {
@@ -13,47 +16,52 @@ const enemy = {
 	damageHP: 100,
 	elHP: document.getElementById('health-enemy'),
 	elProgressbar: document.getElementById('progressbar-enemy'),
+	renderHPLife: renderHPLife,
+	renderProgressbarHP: renderProgressbarHP,
+	changeHP: changeHP,
 }
-
+//Слушатель кнопки
 $btn.addEventListener('click', function () {
 	console.log('Kick!');
-	changeHP(random(20), character);
-	changeHP(random(20), enemy);
+	character.changeHP(random(20));
+	enemy.changeHP(random(20));
 
 });
-
+// Функция запуска игры
 function init () {
 	console.log('Start Game');
-	renderHP(character);
-	renderHP(enemy);
+	character.renderHPLife();
+	character.renderProgressbarHP();
+	enemy.renderHPLife();
+	enemy.renderProgressbarHP();
 }
 
-function renderHP(person) {
-	renderHPLife(person);
-	renderProgressbarHP(person);
+//Записываем в табло величину повреждения персонажа / величину жизни по умолчанию
+function renderHPLife() {
+	this.elHP.innerText = this.damageHP + ' / ' + this.defaultHP;
 }
 
-function renderHPLife(person) {
-	person.elHP.innerText = person.damageHP + ' / ' + person.defaultHP;
+//Меняем длину прогресс бар в зависимости от величины повреждения персонажа
+function renderProgressbarHP() {
+	this.elProgressbar.style.width = this.damageHP + '%';
 }
 
-function renderProgressbarHP(person) {
-	person.elProgressbar.style.width = person.damageHP + '%';
-}
-
-function changeHP(count, person) {
-	if(person.damageHP < count) {
-		person.damageHP = 0
-		alert('Бедный '+person.name+' проиграл бой');
+//Проверяем у кого меньше жизни то person проиграл & дизеблим кнопку. Если нет - отнимаем жизнью. Рендирим новые значения в табло.
+function changeHP(count) {
+	if(this.damageHP < count) {
+		this.damageHP = 0
+		alert('Бедный '+this.name+' проиграл бой');
 		$btn.disabled = true;
 	} else {
-		person.damageHP -= count;
+		this.damageHP -= count;
 	}
-	renderHP(person);
+	this.renderHPLife();
+	this.renderProgressbarHP();
 }
 
+// Получаем случайное число от 1 до num
 function random(num) {
 	return Math.ceil(Math.random() * num);
 }
-
+// Запуск игры
 init();
