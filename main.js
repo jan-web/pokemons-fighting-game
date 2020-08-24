@@ -5,8 +5,7 @@ const character = {
 	damageHP: 100,
 	elHP: document.getElementById('health-character'),
 	elProgressbar: document.getElementById('progressbar-character'),
-	renderHPLife: renderHPLife,
-	renderProgressbarHP: renderProgressbarHP,
+	renderHP: renderHP,
 	changeHP: changeHP,
 }
 
@@ -16,8 +15,7 @@ const enemy = {
 	damageHP: 100,
 	elHP: document.getElementById('health-enemy'),
 	elProgressbar: document.getElementById('progressbar-enemy'),
-	renderHPLife: renderHPLife,
-	renderProgressbarHP: renderProgressbarHP,
+	renderHP: renderHP,
 	changeHP: changeHP,
 }
 //Слушатель кнопки
@@ -30,10 +28,13 @@ $btn.addEventListener('click', function () {
 // Функция запуска игры
 function init () {
 	console.log('Start Game');
-	character.renderHPLife();
-	character.renderProgressbarHP();
-	enemy.renderHPLife();
-	enemy.renderProgressbarHP();
+	character.renderHP();
+	enemy.renderHP();
+}
+
+function renderHP() {
+	renderHPLife.call(this);
+	renderProgressbarHP.call(this);
 }
 
 //Записываем в табло величину повреждения персонажа / величину жизни по умолчанию
@@ -55,8 +56,8 @@ function changeHP(count) {
 	} else {
 		this.damageHP -= count;
 	}
-	this.renderHPLife();
-	this.renderProgressbarHP();
+	this.renderHP();
+
 }
 
 // Получаем случайное число от 1 до num
