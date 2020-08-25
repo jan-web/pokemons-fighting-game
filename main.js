@@ -5,8 +5,8 @@ const character = {
 	damageHP: 100,
 	elHP: document.getElementById('health-character'),
 	elProgressbar: document.getElementById('progressbar-character'),
-	renderHP: renderHP,
-	changeHP: changeHP,
+	renderHP,
+	changeHP,
 }
 
 const enemy = {
@@ -15,8 +15,8 @@ const enemy = {
 	damageHP: 100,
 	elHP: document.getElementById('health-enemy'),
 	elProgressbar: document.getElementById('progressbar-enemy'),
-	renderHP: renderHP,
-	changeHP: changeHP,
+	renderHP,
+	changeHP,
 }
 //Слушатель кнопки
 $btn.addEventListener('click', function () {
@@ -31,10 +31,10 @@ function init () {
 	character.renderHP();
 	enemy.renderHP();
 }
-
+// Вызываем 2 функции рендиринга - табло и прогресс бар
 function renderHP() {
-	renderHPLife.call(this);
-	renderProgressbarHP.call(this);
+	renderHPLife.bind(this)();
+	renderProgressbarHP.bind(this)();
 }
 
 //Записываем в табло величину повреждения персонажа / величину жизни по умолчанию
