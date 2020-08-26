@@ -48,26 +48,29 @@ function renderHP() {
 
 //Записываем в табло величину повреждения персонажа / величину жизни по умолчанию
 function renderHPLife() {
-	this.elHP.innerText = this.damageHP + ' / ' + this.defaultHP;
+	let {damageHP, defaultHP} = this;
+	this.elHP.innerText = damageHP + ' / ' + defaultHP;
 }
 
 //Меняем длину прогресс бар в зависимости от величины повреждения персонажа
 function renderProgressbarHP() {
-	this.elProgressbar.style.width = this.damageHP + '%';
+	let {damageHP} = this;
+	this.elProgressbar.style.width = damageHP + '%';
 }
 
 //Проверяем у кого меньше жизни то person проиграл & дизеблим кнопку. Если нет - отнимаем жизнью. Рендирим новые значения в табло.
 function changeHP(count) {
+	let {name, damageHP, defaultHP} = this;
 	this.damageHP -= count;
 
 	const log = this === enemy ? generateLog(this, character) : generateLog(this, enemy);
 	const $p = document.createElement('p');
-	$p.innerText = `${log} -${count} [${this.damageHP}/${this.defaultHP}]`;
+	$p.innerText = `${log} -${count} [${damageHP}/${defaultHP}]`;
 	// $logs.insertBefore($p, $logs.children[0]); // Устаревшая техника вставки
 	$logs.prepend($p);
-	if(this.damageHP <= 0) {
-		this.damageHP = 0;
-		alert('Бедный '+this.name+' проиграл бой');
+	if(damageHP <= 0) {
+		damageHP = 0;
+		alert('Бедный '+name+' проиграл бой');
 		$btn.disabled = true;
 	}
 
