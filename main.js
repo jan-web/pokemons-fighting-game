@@ -1,22 +1,31 @@
-const $btn = document.getElementById('btn-kick');
+
+const $btn = $getElById('btn-kick');
+const $logs = document.querySelector('#logs');
 const character = {
 	name: 'Picachu',
 	defaultHP: 100,
 	damageHP: 100,
-	elHP: document.getElementById('health-character'),
-	elProgressbar: document.getElementById('progressbar-character'),
+	elHP: $getElById('health-character'),
+	elProgressbar: $getElById('progressbar-character'),
 	renderHP,
 	changeHP,
+	renderHPLife,
+	renderProgressbarHP
 }
 
 const enemy = {
 	name: 'Charmander',
 	defaultHP: 100,
 	damageHP: 100,
-	elHP: document.getElementById('health-enemy'),
-	elProgressbar: document.getElementById('progressbar-enemy'),
+	elHP: $getElById('health-enemy'),
+	elProgressbar: $getElById('progressbar-enemy'),
 	renderHP,
 	changeHP,
+	renderHPLife,
+	renderProgressbarHP
+}
+function $getElById(id){
+	return document.getElementById(id);
 }
 //Слушатель кнопки
 $btn.addEventListener('click', function () {
@@ -33,29 +42,38 @@ function init () {
 }
 // Вызываем 2 функции рендиринга - табло и прогресс бар
 function renderHP() {
-	renderHPLife.bind(this)();
-	renderProgressbarHP.bind(this)();
+	this.renderHPLife();
+	this.renderProgressbarHP();
 }
 
 //Записываем в табло величину повреждения персонажа / величину жизни по умолчанию
 function renderHPLife() {
-	this.elHP.innerText = this.damageHP + ' / ' + this.defaultHP;
+	let {damageHP, defaultHP} = this;
+	this.elHP.innerText = damageHP + ' / ' + defaultHP;
 }
 
 //Меняем длину прогресс бар в зависимости от величины повреждения персонажа
 function renderProgressbarHP() {
-	this.elProgressbar.style.width = this.damageHP + '%';
+	let {damageHP} = this;
+	this.elProgressbar.style.width = damageHP + '%';
 }
 
 //Проверяем у кого меньше жизни то person проиграл & дизеблим кнопку. Если нет - отнимаем жизнью. Рендирим новые значения в табло.
 function changeHP(count) {
-	if(this.damageHP < count) {
-		this.damageHP = 0
-		alert('Бедный '+this.name+' проиграл бой');
+	let {name, damageHP, defaultHP} = this;
+	this.damageHP -= count;
+
+	const log = this === enemy ? generateLog(this, character) : generateLog(this, enemy);
+	const $p = document.createElement('p');
+	$p.innerText = `${log} -${count} [${damageHP}/${defaultHP}]`;
+	// $logs.insertBefore($p, $logs.children[0]); // Устаревшая техника вставки
+	$logs.prepend($p);
+	if(damageHP <= 0) {
+		damageHP = 0;
+		alert('Бедный '+name+' проиграл бой');
 		$btn.disabled = true;
-	} else {
-		this.damageHP -= count;
 	}
+
 	this.renderHP();
 
 }
@@ -64,5 +82,24 @@ function changeHP(count) {
 function random(num) {
 	return Math.ceil(Math.random() * num);
 }
+
+function generateLog(firstPerson, secondPerson) {
+	const logs = [
+		`${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага.`,
+		`${firstPerson.name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага.`,
+		`${firstPerson.name} забылся, но в это время наглый ${secondPerson.name}, приняв волевое решение, неслышно подойдя сзади, ударил.`,
+		`${firstPerson.name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар.`,
+		`${firstPerson.name} поперхнулся, но в это время ${secondPerson.name} нехотя раздробил кулаком \<вырезанно цензурой\> противника.`,
+		`${firstPerson.name} удивился, а ${secondPerson.name} пошатнувшись влепил подлый удар.`,
+		`${firstPerson.name} высморкался, но неожиданно ${secondPerson.name} провел дробящий удар.`,
+		`${firstPerson.name} пошатнулся, и внезапно наглый ${secondPerson.name} беспричинно ударил в ногу противника`,
+		`${firstPerson.name} расстроился, как вдруг, неожиданно ${secondPerson.name} случайно влепил стопой в живот соперника.`,
+		`${firstPerson.name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику.`
+	];
+
+	return logs[random(logs.length) - 1];
+}
+
+
 // Запуск игры
 init();
