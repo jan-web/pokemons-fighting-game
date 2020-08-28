@@ -1,5 +1,9 @@
 
 const $btn = $getElById('btn-kick');
+const $btnBall = $getElById('btn-ball');
+const jolts = document.querySelector('.jolts');
+const balls = document.querySelector('.balls');
+const control = document.querySelector('.control');
 const $logs = document.querySelector('#logs');
 const character = {
 	name: 'Picachu',
@@ -28,17 +32,48 @@ function $getElById(id){
 	return document.getElementById(id);
 }
 //Слушатель кнопки
-$btn.addEventListener('click', function () {
-	console.log('Kick!');
+control.addEventListener('click', function (e) {
+	let target = e.target;
+	console.log('Kick!', target.id);
+	kickCount(target.id);
 	character.changeHP(random(20));
 	enemy.changeHP(random(20));
 
 });
+
+//
+function kickFun () {
+	let trunderKick = 6;
+	let fireBall = 6;
+	return function (id){
+		if(id === 'btn-kick'){
+			if (trunderKick >= 2) {
+				trunderKick--;
+			jolts.textContent = trunderKick;
+		} else {
+			jolts.textContent = 0;
+			$btn.disabled = true;
+		}
+		}
+		if(id === 'btn-ball'){
+			if (fireBall >= 2) {
+			fireBall--;
+			balls.textContent = fireBall;
+		} else {
+			$btnBall.disabled = true;
+		}
+		}
+
+	}
+}
+const kickCount = kickFun();
+
 // Функция запуска игры
 function init () {
 	console.log('Start Game');
 	character.renderHP();
 	enemy.renderHP();
+
 }
 // Вызываем 2 функции рендиринга - табло и прогресс бар
 function renderHP() {

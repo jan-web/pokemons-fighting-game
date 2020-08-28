@@ -40,8 +40,12 @@ body {
     position: relative;
     margin: 20px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.control button {
+    margin-bottom: 15px;
 }
 
 .playground {
