@@ -36,32 +36,39 @@ control.addEventListener('click', function (e) {
 	let target = e.target;
 	console.log('Kick!', target.id);
 	kickCount(target.id);
-	character.changeHP(random(20));
-	enemy.changeHP(random(20));
+	if ((character.damageHP >0) && (enemy.damageHP >0)) {
+		console.log('character.damageHP = ', (character.damageHP >0) && (enemy.damageHP >0));
+
+	}
+		character.changeHP(random(20));
+		enemy.changeHP(random(20));
 
 });
 
-//
+//Ф. подсчета остатка кликов по кнопкам различных атак
 function kickFun () {
 	let trunderKick = 6;
 	let fireBall = 6;
 	return function (id){
 		if(id === 'btn-kick'){
-			if (trunderKick >= 2) {
+			if (trunderKick > 1) {
 				trunderKick--;
-			jolts.textContent = trunderKick;
-		} else {
-			jolts.textContent = 0;
-			$btn.disabled = true;
-		}
+				jolts.textContent = trunderKick;
+				}
+			else {
+				jolts.textContent = 0;
+				$btn.disabled = true;
+				}
 		}
 		if(id === 'btn-ball'){
-			if (fireBall >= 2) {
+			if (fireBall > 1) {
 			fireBall--;
 			balls.textContent = fireBall;
-		} else {
-			$btnBall.disabled = true;
-		}
+			}
+			else {
+				balls.textContent = 0;
+				$btnBall.disabled = true;
+			}
 		}
 
 	}
@@ -93,24 +100,27 @@ function renderProgressbarHP() {
 	this.elProgressbar.style.width = damageHP + '%';
 }
 
-//Проверяем у кого меньше жизни то person проиграл & дизеблим кнопку. Если нет - отнимаем жизнью. Рендирим новые значения в табло.
+//Запрос в генератор сообщений о ходе битвы. Проверяем у кого меньше жизни то person проиграл & дизеблим кнопку. Если нет - отнимаем жизнью. Рендирим новые значения в табло.
 function changeHP(count) {
-	let {name, damageHP, defaultHP} = this;
+	let {name, defaultHP} = this;
 	this.damageHP -= count;
+	let damageHP = this.damageHP;
 
-	const log = this === enemy ? generateLog(this, character) : generateLog(this, enemy);
+	const log = this === enemy ? generateLog(this, character, count, damageHP, defaultHP ) : generateLog(this, enemy, count, damageHP, defaultHP);
 	const $p = document.createElement('p');
-	$p.innerText = `${log} -${count} [${damageHP}/${defaultHP}]`;
+	$p.innerText = log;
 	// $logs.insertBefore($p, $logs.children[0]); // Устаревшая техника вставки
 	$logs.prepend($p);
+	console.log('damageHP =', damageHP);
 	if(damageHP <= 0) {
+		this.renderHP();
 		damageHP = 0;
-		alert('Бедный '+name+' проиграл бой');
 		$btn.disabled = true;
+		$btnBall.disabled = true;
+		alert('Бедный '+name+' проиграл бой');
+	} else {
+		this.renderHP();
 	}
-
-	this.renderHP();
-
 }
 
 // Получаем случайное число от 1 до num
@@ -118,7 +128,8 @@ function random(num) {
 	return Math.ceil(Math.random() * num);
 }
 
-function generateLog(firstPerson, secondPerson) {
+function generateLog(firstPerson, secondPerson, count, damageHP, defaultHP) {
+
 	const logs = [
 		`${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага.`,
 		`${firstPerson.name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага.`,
@@ -132,7 +143,7 @@ function generateLog(firstPerson, secondPerson) {
 		`${firstPerson.name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику.`
 	];
 
-	return logs[random(logs.length) - 1];
+	return `${logs[random(logs.length) - 1]} -${count} [${damageHP}/${defaultHP}]` ;
 }
 
 
