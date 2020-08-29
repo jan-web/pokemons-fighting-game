@@ -36,12 +36,8 @@ control.addEventListener('click', function (e) {
 	let target = e.target;
 	console.log('Kick!', target.id);
 	kickCount(target.id);
-	if ((character.damageHP >0) && (enemy.damageHP >0)) {
-		console.log('character.damageHP = ', (character.damageHP >0) && (enemy.damageHP >0));
-
-	}
-		character.changeHP(random(20));
-		enemy.changeHP(random(20));
+	character.changeHP(random(20));
+	enemy.changeHP(random(20));
 
 });
 
@@ -53,20 +49,24 @@ function kickFun () {
 		if(id === 'btn-kick'){
 			if (trunderKick > 1) {
 				trunderKick--;
+				console.log('Количество нанесённых ударов типа Trunder Jolt = ', 6 - trunderKick);
 				jolts.textContent = trunderKick;
 				}
 			else {
 				jolts.textContent = 0;
+				console.log('Количество нанесённых ударов типа Trunder Jolt = ', 6 );
 				$btn.disabled = true;
 				}
 		}
 		if(id === 'btn-ball'){
 			if (fireBall > 1) {
-			fireBall--;
-			balls.textContent = fireBall;
+				fireBall--;
+				console.log('Количество нанесённых ударов типа Fire Ball = ', 6 - fireBall);
+				balls.textContent = fireBall;
 			}
 			else {
 				balls.textContent = 0;
+				console.log('Количество нанесённых ударов типа Fire Ball = ', 6);
 				$btnBall.disabled = true;
 			}
 		}
@@ -111,7 +111,6 @@ function changeHP(count) {
 	$p.innerText = log;
 	// $logs.insertBefore($p, $logs.children[0]); // Устаревшая техника вставки
 	$logs.prepend($p);
-	console.log('damageHP =', damageHP);
 	if(damageHP <= 0) {
 		this.renderHP();
 		damageHP = 0;
