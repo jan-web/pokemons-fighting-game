@@ -1,10 +1,23 @@
+import Pokemon from "./pokemon.js";
+import random from './utils.js';
+
+
+const player1 = new Pokemon({
+	name: 'Pikachu',
+	type: 'electric',
+	hp: 500,
+	selectors: 'character',
+});
+console.log(player1);
 
 const $btn = $getElById('btn-kick');
 const $btnBall = $getElById('btn-ball');
+
 const jolts = document.querySelector('.jolts');
 const balls = document.querySelector('.balls');
 const control = document.querySelector('.control');
 const $logs = document.querySelector('#logs');
+
 const character = {
 	name: 'Picachu',
 	defaultHP: 100,
@@ -15,7 +28,7 @@ const character = {
 	changeHP,
 	renderHPLife,
 	renderProgressbarHP
-}
+};
 
 const enemy = {
 	name: 'Charmander',
@@ -27,7 +40,7 @@ const enemy = {
 	changeHP,
 	renderHPLife,
 	renderProgressbarHP
-}
+};
 function $getElById(id){
 	return document.getElementById(id);
 }
@@ -42,6 +55,7 @@ control.addEventListener('click', function (e) {
 });
 
 //Ф. подсчета остатка кликов по кнопкам различных атак
+const kickCount = kickFun();
 function kickFun () {
 	let trunderKick = 6;
 	let fireBall = 6;
@@ -71,9 +85,9 @@ function kickFun () {
 			}
 		}
 
-	}
+	};
 }
-const kickCount = kickFun();
+
 
 // Функция запуска игры
 function init () {
@@ -122,10 +136,7 @@ function changeHP(count) {
 	}
 }
 
-// Получаем случайное число от 1 до num
-function random(num) {
-	return Math.ceil(Math.random() * num);
-}
+
 
 function generateLog(firstPerson, secondPerson, count, damageHP, defaultHP) {
 
