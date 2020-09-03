@@ -6,7 +6,7 @@ class Selectors {
 }
 
 class Pokemon extends Selectors{
-	constructor({name, hp, type, selectors}) {
+	constructor({name, hp, type, selectors, img, attacks = []}) {
 		super(selectors);
 
 		this.name = name;
@@ -15,19 +15,25 @@ class Pokemon extends Selectors{
 			total: hp,
 		};
 		this.type = type;
+		this.img = img;
+		this.attacks = attacks;
 		this.renderHP();
 	}
 	//Запрос в генератор сообщений о ходе битвы. Проверяем у кого меньше жизни то person проиграл & дизеблим кнопку. Если нет - отнимаем жизнью. Рендирим новые значения в табло.
-	changeHP = (count, $btn, $btnBall, cb) => {
+	changeHP = (count, $control, cb) => {
 
 		this.hp.current -= count;
 
 		if(this.hp.current <= 0) {
 			this.renderHP();
 			this.hp.currentP = 0;
-			$btn.disabled = true;
-			$btnBall.disabled = true;
-			alert('Бедный '+name+' проиграл бой');
+			let buttons = $control.querySelectorAll('button');
+			for(let button of buttons) {
+				// console.log(button);
+				button.disabled = true;
+			}
+
+			alert('Бедный '+this.name+' проиграл бой');
 		} else {
 			this.renderHP();
 		}

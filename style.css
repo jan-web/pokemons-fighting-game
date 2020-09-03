@@ -35,17 +35,18 @@ body {
 }
 
 .control {
-    width: 320px;
+    width: 360px;
     height: 260px;
     position: relative;
     margin: 20px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-wrap: wrap;
+    /* flex-direction: column; */
+    justify-content: space-between;
     align-items: center;
 }
 .control button {
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
 }
 
 .playground {
