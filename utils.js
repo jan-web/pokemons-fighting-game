@@ -1,6 +1,4 @@
 
-
-
 // Получаем случайное число от 1 до num
 export function random(max, min = 0) {
 	const num = max - min;
