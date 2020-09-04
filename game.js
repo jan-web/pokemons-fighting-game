@@ -12,8 +12,8 @@ class Game {
 		this.startBtn = document.createElement('button');
 		this.resetBtn = document.createElement('button');
 		this.logs = document.querySelector('#logs');
-
-
+		this.player1 = {};
+		this.player2 = {};
 	}
 	selectPersons = () => {
 		while (this.randPerson2 === this.randPerson1)
@@ -21,11 +21,28 @@ class Game {
 			this.randPerson2 = random(5);
 		}
 	}
+	generateButtons = (player1, player2, control) =>{
+		player1.attacks.forEach(item => {
+			const $btn = document.createElement('button');
+			$btn.classList.add('button');
+			$btn.innerText = item.name;
 
+			const kickCount = kickFun(item.maxCount, $btn);
+			$btn.addEventListener('click', () => {
+					kickCount();
+					player2.changeHP(random(20), control, function(count) {
+					let log = generateLog(player1, player2, count);
+					insertLog(log);
+					});
+			});
+
+			this.control.append($btn);
+		});
+	};
 	startGame = () => {
 		//создание игроков
 		// Создаем 1го игрока типа Pokemon используя базу данных pokemons.js
-		const player1 = new Pokemon({
+		this.player1 = new Pokemon({
 			...(pokemons.find(item => item.name === pokemons[this.randPerson1].name)),
 			selectors: 'player1',
 		});
@@ -34,10 +51,10 @@ class Game {
 		$elName1.innerText = pokemons[this.randPerson1].name;
 		const $elImg = document.getElementById('img-player1');
 		// Меняем картинку на правильную
-		$elImg.src = player1.img;
+		$elImg.src = this.player1.img;
 
 		// Создаем 1го игрока типа Pokemon используя базу данных pokemons.js
-		const player2 = new Pokemon({
+		this.player2 = new Pokemon({
 			...(pokemons.find(item => item.name === pokemons[this.randPerson2].name)),
 			selectors: 'player2',
 		});
@@ -46,50 +63,19 @@ class Game {
 		$elName2.innerText = pokemons[this.randPerson2].name;
 		const $elImg2 = document.getElementById('img-player2');
 		// Меняем картинку на правильную
-		$elImg2.src = player2.img;
+		$elImg2.src = this.player2.img;
 
-				//Создаем кнопки 1му игроку
-		player1.attacks.forEach(item => {
-
-			const $btn = document.createElement('button');
-			$btn.classList.add('button');
-			$btn.innerText = item.name;
-			const kickCount = kickFun(item.maxCount, $btn);
-			$btn.addEventListener('click', () => {
-				kickCount();
-			player2.changeHP(random(20), this.control, function(count) {
-				let log = generateLog(player2, player1  , count);
-				insertLog(log);
-				});
-
-			});
-
-			this.control.append($btn);
-		});
-
-
+		//Создаем кнопки 1му игроку
+		this.generateButtons(this.player1, this.player2, this.control);
 		//Создаем кнопки 2му игроку
-		player2.attacks.forEach(item => {
-
-			const $btn = document.createElement('button');
-			$btn.classList.add('button');
-			$btn.innerText = item.name;
-			const kickCount = kickFun(item.maxCount, $btn);
-			$btn.addEventListener('click', () => {
-				kickCount();
-			player1.changeHP(random(20), this.control, function(count) {
-				let log = generateLog(player1, player2, count);
-				insertLog(log);
-				});
-			});
-
-			this.control.append($btn);
-		});
+		this.generateButtons(this.player2, this.player1, this.control);
 
 		this.resetBtn.classList.add('button');
 		this.resetBtn.innerText = "Reset Game";
 		this.resetPlace.append(this.resetBtn);
 	}
+
+
 
 	resetGame = () => {
 		const allButtons = document.querySelectorAll('.control .button');
