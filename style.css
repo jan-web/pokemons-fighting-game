@@ -35,17 +35,27 @@ body {
 }
 
 .control {
-    width: 320px;
+    width: 360px;
     height: 260px;
     position: relative;
     margin: 20px;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+.resetBtn {
+    width: 360px;
+    height: 30px;
+    margin: 0 auto;
+}
+.resetBtn .button {
+    margin-top: -50px;
+}
 .control button {
     margin-bottom: 15px;
+
 }
 
 .playground {
@@ -475,4 +485,7 @@ h1 {
 
 .action label {
     padding: 6px 0;
+}
+.nodisplay {
+    display: none;
 }
