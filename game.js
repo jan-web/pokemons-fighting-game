@@ -1,11 +1,10 @@
 import Pokemon from "./pokemon.js";
 import { random, generateLog, insertLog, kickFun } from './utils.js';
-import { pokemons } from './pokemons.js';
+// import { pokemons } from './pokemons.js';
 class Game {
 	constructor (){
 
-		this.randPerson1 = random(5);
-		this.randPerson2 = this.randPerson1;
+
 		this.selectPersons();
 		this.control = document.querySelector('.control');
 		this.resetPlace = document.querySelector('.resetBtn');
@@ -21,16 +20,34 @@ class Game {
 			this.randPerson2 = random(5);
 		}
 	}
-	generateButtons = (player1, player2, control) =>{
+	// Получаем одного персонажа с сервера
+	 getRandomPokemon = async () => {
+		const response = await fetch('https://reactmarathon-api.netlify.app/api/pokemons?random=true');
+		const body = await response.json();
+		return body;
+	  };
+	  // Получаем рандомное значение повреждения в зависимости от атаки и персонажей с сервера
+	 getRandomDamage = async (id_player1, id_player2, id_attack) => {
+		const response = await fetch(`https://reactmarathon-api.netlify.app/api/fight?player1id=${id_player1}&attackId=${id_attack}&player2id=${id_player2}`);
+		const body = await response.json();
+		return body;
+	  };
+
+
+	generateButtons =  (player1, player2, control) =>{
 		player1.attacks.forEach(item => {
+			
 			const $btn = document.createElement('button');
 			$btn.classList.add('button');
 			$btn.innerText = item.name;
 
 			const kickCount = kickFun(item.maxCount, $btn);
-			$btn.addEventListener('click', () => {
+			$btn.addEventListener('click', async () => {
 					kickCount();
-					player2.changeHP(random(20), control, function(count) {
+
+					const damageObj = await this.getRandomDamage(player1.id, player2.id, item.id);
+					// Добавляем порадение для врага полученное с сервера
+					player2.changeHP(damageObj.kick.player2, control, function(count) {
 					let log = generateLog(player1, player2, count);
 					insertLog(log);
 					});
@@ -39,31 +56,48 @@ class Game {
 			this.control.append($btn);
 		});
 	};
-	startGame = () => {
-		//создание игроков
-		// Создаем 1го игрока типа Pokemon используя базу данных pokemons.js
+	startGame = async() => {
+		const randomPokemon1 = await this.getRandomPokemon();
+		// Создаем 1го игрока типа Pokemon используя базу данных на сервере
 		this.player1 = new Pokemon({
-			...(pokemons.find(item => item.name === pokemons[this.randPerson1].name)),
+			...(randomPokemon1),
 			selectors: 'player1',
 		});
 		// Вписываем правильное имя перcонажа в табло
 		const $elName1 = document.getElementById('name-player1');
-		$elName1.innerText = pokemons[this.randPerson1].name;
+		$elName1.innerText = randomPokemon1.name;
 		const $elImg = document.getElementById('img-player1');
 		// Меняем картинку на правильную
-		$elImg.src = this.player1.img;
+		if (this.player1.img === 'http://sify4321.000webhostapp.com/charmander.png'){
+			$elImg.src = 'assets/charmander.png';
+		} else {
+			$elImg.src = this.player1.img;
+		}
+		let randomPokemon2 = randomPokemon1;
+		while (true)
+		{
+			randomPokemon2 = await this.getRandomPokemon();
+			if (randomPokemon2.name != randomPokemon1.name)
+			{
+				break;
+			}
+		}
 
-		// Создаем 1го игрока типа Pokemon используя базу данных pokemons.js
+		// Создаем 2го игрока типа Pokemon используя базу данных на сервере
 		this.player2 = new Pokemon({
-			...(pokemons.find(item => item.name === pokemons[this.randPerson2].name)),
+			...(randomPokemon2),
 			selectors: 'player2',
 		});
-		// Вписываем правильное имя первоснажа в табло
+		// Вписываем правильное имя персонажа в табло
 		const $elName2 = document.getElementById('name-player2');
-		$elName2.innerText = pokemons[this.randPerson2].name;
+		$elName2.innerText = randomPokemon2.name;
 		const $elImg2 = document.getElementById('img-player2');
 		// Меняем картинку на правильную
-		$elImg2.src = this.player2.img;
+		if (this.player2.img === 'http://sify4321.000webhostapp.com/charmander.png'){
+			$elImg2.src = 'assets/charmander.png';
+		} else {
+			$elImg2.src = this.player2.img;
+		}
 
 		//Создаем кнопки 1му игроку
 		this.generateButtons(this.player1, this.player2, this.control);
@@ -84,8 +118,8 @@ class Game {
 
 
 		this.startBtn.classList.add('button');
-		this.startBtn.innerText = "Start Game";
-
+		this.startBtn.innerText = "Start New Game";
+		this.resetBtn.remove();
 		this.control.append(this.startBtn);
 	};
 }
