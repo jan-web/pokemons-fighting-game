@@ -11,8 +11,8 @@ import Game from './game.js';
 
 	game.resetBtn.addEventListener('click', () => {
 		game.resetGame();
-		game.resetBtn.remove();
-	})
+		
+	});
 
 
 

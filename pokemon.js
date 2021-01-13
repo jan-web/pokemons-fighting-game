@@ -6,9 +6,10 @@ class Selectors {
 }
 
 class Pokemon extends Selectors{
-	constructor({name, hp, type, selectors, img, attacks = []}) {
+	constructor({id, name, hp, type, selectors, img, attacks = []}) {
 		super(selectors);
 
+		this.id = id,
 		this.name = name;
 		this.hp = {
 			current: hp,
