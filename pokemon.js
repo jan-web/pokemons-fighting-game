@@ -34,7 +34,7 @@ class Pokemon extends Selectors{
 				button.disabled = true;
 			}
 
-			alert('Poor' + this.name + 'lost the battle');
+			alert('Poor ' + this.name + ' lost the battle');
 		} else {
 			this.renderHP();
 		}
