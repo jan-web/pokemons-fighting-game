@@ -1,5 +1,4 @@
 
-// Получаем случайное число от 1 до num
 export function random(max, min = 0) {
 	const num = max - min;
 	return Math.ceil(Math.random() * num) + min;
@@ -11,8 +10,7 @@ export function insertLog(log) {
 	$logs.prepend($p);
 }
 
-//Ф. подсчета остатка кликов по кнопкам различных атак
-// const kickCount = kickFun();
+
 export function kickFun (maxCount, btn) {
 	const btnName = btn.innerText;
 	btn.innerText = btnName + ' ' + maxCount;
@@ -34,16 +32,16 @@ export function generateLog(player1, player2, count) {
 	const {name: enemyName } = player2;
 
 	const logs = [
-		`${name} вспомнил что-то важное, но неожиданно ${enemyName}, не помня себя от испуга, ударил в предплечье врага.`,
-		`${name} поперхнулся, и за это ${enemyName} с испугу приложил прямой удар коленом в лоб врага.`,
-		`${name} забылся, но в это время наглый ${enemyName}, приняв волевое решение, неслышно подойдя сзади, ударил.`,
-		`${name} пришел в себя, но неожиданно ${enemyName} случайно нанес мощнейший удар.`,
-		`${name} поперхнулся, но в это время ${enemyName} нехотя раздробил кулаком \<вырезанно цензурой\> противника.`,
-		`${name} удивился, а ${enemyName} пошатнувшись влепил подлый удар.`,
-		`${name} высморкался, но неожиданно ${enemyName} провел дробящий удар.`,
-		`${name} пошатнулся, и внезапно наглый ${enemyName} беспричинно ударил в ногу противника`,
-		`${name} расстроился, как вдруг, неожиданно ${enemyName} случайно влепил стопой в живот соперника.`,
-		`${name} пытался что-то сказать, но вдруг, неожиданно ${enemyName} со скуки, разбил бровь сопернику.`
+		`${name} remembered something important, but suddenly ${enemyName}, not remembering himself from fright, hit the enemy in the forearm.`,
+		`${name} choked, and for this ${enemyName} in fright applied a direct knee blow to the enemy's forehead.`,
+		`${name} was forgotten, but at this time the impudent ${enemyName}, having made a willful decision, silently approached from behind, hit.`,
+		`${name} came to his senses, but suddenly ${enemyName} accidentally struck a powerful blow.`,
+		`${name} choked, but at that time ${enemyName} reluctantly smashed the enemy \ <censored \> with his fist .`,
+		`${name} was surprised, and ${enemyName} staggered and slapped a sneaky blow.`,
+		`${name} blew his nose, but unexpectedly ${enemyName} made a bludgeoning blow.`,
+		`${name} staggered, and suddenly the impudent ${enemyName} hit the enemy's leg for no reason`,
+		`${name} was upset when suddenly, unexpectedly, ${enemyName} accidentally slammed his foot into the opponent's stomach.`,
+		`${name} tried to say something, but suddenly, unexpectedly ${enemyName} out of boredom, shattered an opponent's eyebrow.`
 	];
 
 	return `${logs[random(logs.length) - 1]} -${count} [${current}/${total}]` ;
