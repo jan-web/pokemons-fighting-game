@@ -4,7 +4,7 @@ import Game from './game.js';
 	game.resetGame();
 
 	game.startBtn.addEventListener('click', () => {
-		game.startBtn.remove();
+		game.startBtn.remove(); 
 		game.startGame();
 	});
 

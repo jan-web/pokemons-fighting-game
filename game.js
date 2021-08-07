@@ -11,6 +11,7 @@ class Game {
 		this.startBtn = document.createElement('button');
 		this.resetBtn = document.createElement('button');
 		this.logs = document.querySelector('#logs');
+		this.rules = document.querySelector('.rules');
 		this.player1 = {};
 		this.player2 = {};
 	}
@@ -107,6 +108,8 @@ class Game {
 		this.resetBtn.classList.add('button');
 		this.resetBtn.innerText = "Reset Game";
 		this.resetPlace.append(this.resetBtn);
+		this.rules.classList.add('nodisplay');
+		this.logs.classList.remove('nodisplay');
 	}
 
 
@@ -121,6 +124,8 @@ class Game {
 		this.startBtn.innerText = "Start New Game";
 		this.resetBtn.remove();
 		this.control.append(this.startBtn);
+		this.rules.classList.remove('nodisplay');
+		this.logs.classList.add('nodisplay');
 	};
 }
 
